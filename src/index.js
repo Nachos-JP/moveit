@@ -1,6 +1,6 @@
 "use strict";
 
-const Moveit = class {
+export default class {
   constructor(element, options){
     this.options = {};
 
@@ -51,4 +51,3 @@ const Moveit = class {
   }
 };
 
-export {Moveit as default, Moveit}
