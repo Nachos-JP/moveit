@@ -1,9 +1,29 @@
 const path = require("path");
 
 module.exports = {
-  entry: path.resolve(__dirname, "/src/index.js"),
+  entry: path.resolve(__dirname, "/src/js/index.js"),
   module: {
     rules: [
+      {
+        test: /\.scss/,
+        use: [
+          "style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              url: false,
+              sourceMap: true,
+              importLoaders: 2,
+            },
+          },
+          {
+            loader: "sass-loader",
+            options: {
+              sourceMap: true,
+            },
+          },
+        ],
+      },
       {
         test: /\.m?js$/,
         exclude: /(node_modules)/,

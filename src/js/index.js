@@ -1,5 +1,7 @@
 "use strict";
 
+import "../scss/style.scss";
+
 export default class {
   constructor(element, options){
     this.options = {};
@@ -34,14 +36,15 @@ export default class {
 
   initializeOptions(options){
     const keys = Object.keys(options);
+    const defaultKeys = Object.keys(this.defaultOptions);
 
     keys.forEach(key=>{
-      if(typeof this.defaultOptions[key] === "undefined"){
+      if(!defaultKeys.includes(key)){
         console.warn("Moveit Warn - invalid option: ", key);
       }
     })
 
-    Object.keys(this.defaultOptions).forEach(key=>{
+    defaultKeys.forEach(key=>{
       if(keys.includes(key)){
         this.options[key] = options[key];
       }else{
