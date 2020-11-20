@@ -8,12 +8,11 @@ export default class {
 
     if(this.initializeElement(element)){
       this.initializeOptions(options ?? {});
+      this._setup();
     }
   }
 
-  defaultOptions = {
-
-  };
+  defaultOptions = {};
 
   initializeElement(element){
     if(typeof HTMLElement !== "undefined" && element instanceof HTMLElement){
@@ -50,6 +49,42 @@ export default class {
       }else{
         this.options[key] = this.defaultOptions[key];
       }
+    })
+  }
+
+  _setup(){
+    this.element.addEventListener("mousedown", this.mouseDown.bind(this), false);
+  }
+
+  mouseDown(e){
+    this.target = e.target;
+    this.x = e.clientX - (this.target.offsetLeft - this.target.offsetWidth/2);
+    this.y = e.clientY - (this.target.offsetTop - this.target.offsetHeight/2);
+
+    this.mouseMoveHandler = this.mouseMove.bind(this);
+    this.mouseUpHandler = this.mouseUp.bind(this);
+    document.body.addEventListener("mousemove", this.mouseMoveHandler, false);
+    document.body.addEventListener("mouseup", this.mouseUpHandler, false);
+    document.body.addEventListener("mouseleave", this.mouseUpHandler, false);
+  }
+
+  mouseMove(e){
+    const newStyle = {
+      top: `${e.clientY - this.y + this.target.offsetHeight/2}px`,
+      left: `${e.clientX - this.x + this.target.offsetWidth/2}px`,
+    };
+    this._styleEditor(this.target, newStyle);
+  }
+
+  mouseUp(){
+    document.body.removeEventListener("mousemove", this.mouseMoveHandler, false);
+    document.body.removeEventListener("mouseup", this.mouseUpHandler, false);
+    document.body.removeEventListener("mouseleave", this.mouseUpHandler, false);
+  }
+
+  _styleEditor(target, obj){
+    Object.keys(obj).forEach(key=>{
+      target.style[key] = obj[key];
     })
   }
 };
