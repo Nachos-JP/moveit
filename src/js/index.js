@@ -12,7 +12,17 @@ export default class {
     }
   }
 
-  defaultOptions = {};
+  defaultOptions = {
+    handle: false,
+    handleText: "",
+    handleWidth: "50px",
+    handleHeight: "30px",
+    handleBackground: "silver",
+    handleTextColor: "black",
+    handleCursor: "move",
+    handleTextAlign: "center",
+    handleFontSize: "15px",
+  };
 
   initializeElement(element){
     if(typeof HTMLElement !== "undefined" && element instanceof HTMLElement){
@@ -53,22 +63,43 @@ export default class {
   }
 
   _setup(){
-    this.element.addEventListener("mousedown", this.mouseDown.bind(this), false);
+    this.handleElem = this.options.handle ? this._createHandle() : this.element;
+    this.target = this.options.handle ? this.handleElem.parentNode : this.element;
+    this.handleElem.addEventListener("mousedown", this._mouseDown.bind(this), false);
   }
 
-  mouseDown(e){
-    this.target = e.target;
+  _createHandle(){
+    const handle = document.createElement("div");
+    handle.textContent = this.options.handleText;
+    handle.classList.add("moveit-handle");
+    const handleStyle = {
+      width: this.options.handleWidth,
+      height: this.options.handleHeight,
+      background: this.options.handleBackground,
+      color: this.options.handleTextColor,
+      cursor: this.options.handleCursor,
+      "text-align": this.options.handleTextAlign,
+      "font-size": this.options.handleFontSize,
+      "line-height": this.options.handleHeight,
+    };
+    this._styleEditor(handle, handleStyle);
+    this.element.appendChild(handle);
+
+    return handle;
+  }
+
+  _mouseDown(e){
     this.x = e.clientX - (this.target.offsetLeft - this.target.offsetWidth/2);
     this.y = e.clientY - (this.target.offsetTop - this.target.offsetHeight/2);
 
-    this.mouseMoveHandler = this.mouseMove.bind(this);
-    this.mouseUpHandler = this.mouseUp.bind(this);
+    this.mouseMoveHandler = this._mouseMove.bind(this);
+    this.mouseUpHandler = this._mouseUp.bind(this);
     document.body.addEventListener("mousemove", this.mouseMoveHandler, false);
     document.body.addEventListener("mouseup", this.mouseUpHandler, false);
     document.body.addEventListener("mouseleave", this.mouseUpHandler, false);
   }
 
-  mouseMove(e){
+  _mouseMove(e){
     const newStyle = {
       top: `${e.clientY - this.y + this.target.offsetHeight/2}px`,
       left: `${e.clientX - this.x + this.target.offsetWidth/2}px`,
@@ -76,7 +107,7 @@ export default class {
     this._styleEditor(this.target, newStyle);
   }
 
-  mouseUp(){
+  _mouseUp(){
     document.body.removeEventListener("mousemove", this.mouseMoveHandler, false);
     document.body.removeEventListener("mouseup", this.mouseUpHandler, false);
     document.body.removeEventListener("mouseleave", this.mouseUpHandler, false);
