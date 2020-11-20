@@ -1,8 +1,8 @@
 {
   "name": "moveit",
-  "version": "0.0.0",
-  "description": "Make HTML elements draggable",
-  "main": "index.js",
+  "version": "1.0.0",
+  "description": "To draggable any HTML element",
+  "main": "dist/moveit.js",
   "scripts": {
     "build:production": "NODE_ENV=production webpack",
     "build:development": "NODE_ENV=development webpack",
