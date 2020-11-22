@@ -1,8 +1,11 @@
 {
-  "name": "moveit",
+  "name": "@nachos-jp/moveit",
   "version": "1.0.0",
   "description": "To draggable any HTML element",
   "main": "dist/moveit.js",
+  "publishConfig": {
+    "registry":"https://npm.pkg.github.com"
+  },
   "scripts": {
     "build:production": "NODE_ENV=production webpack",
     "build:development": "NODE_ENV=development webpack",
